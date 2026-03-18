@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Deck 2026 — AIGA Dallas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #111110;
+    --white: #F7F5F0;
+    --cream: #EDE9E0;
+    --mid: #8A8780;
+    --border: rgba(17,17,16,0.12);
+    --red: #B83232;
+    --spade: #111110;
+    --heart: #B83232;
+    --club: #2B5C3F;
+    --diamond: #1A3A6B;
+    --joker: #6B3FA0;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--cream);
+    color: var(--black);
+    font-family: var(--font-mono);
+  }
+
+  .app {
+    display: flex;
+    height: 100vh;
+    min-height: 600px;
+  }
+
+  /* ── LEFT PANEL ── */
+  .left {
+    width: 300px;
+    flex-shrink: 0;
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .left-header {
+    padding: 1.5rem 1.5rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 6px;
+  }
+
+  .left-title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--black);
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+  }
+
+  .stat {
+    background: var(--cream);
+    border-radius: 6px;
+    padding: 7px 5px;
+    text-align: center;
+  }
+
+  .stat-num {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--black);
+  }
+
+  .stat-label {
+    display: block;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 1px;
+  }
+
+  .suit-filters {
+    display: flex;
+    gap: 4px;
+    padding: 10px 1.5rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .suit-btn {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--mid);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .suit-btn:hover { background: var(--cream); }
+  .suit-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+  .suit-btn.active.spades { background: var(--spade); border-color: var(--spade); }
+  .suit-btn.active.hearts { background: var(--heart); border-color: var(--heart); }
+  .suit-btn.active.clubs  { background: var(--club);  border-color: var(--club); }
+  .suit-btn.active.diamonds { background: var(--diamond); border-color: var(--diamond); }
+  .suit-btn.active.jokers { background: var(--joker); border-color: var(--joker); }
+
+  .landmark-list {
+    overflow-y: auto;
+    flex: 1;
+  }
+  .landmark-list::-webkit-scrollbar { width: 3px; }
+  .landmark-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .landmark-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 1.5rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+    gap: 10px;
+  }
+  .landmark-row:hover { background: var(--cream); }
+  .landmark-row.active { background: var(--cream); }
+  .landmark-row.claimed { opacity: 0.4; pointer-events: none; }
+
+  .row-suit {
+    font-size: 14px;
+    flex-shrink: 0;
+    width: 18px;
+    text-align: center;
+  }
+
+  .row-info { flex: 1; min-width: 0; }
+
+  .row-num {
+    font-size: 9px;
+    color: var(--mid);
+    letter-spacing: 0.06em;
+    margin-bottom: 1px;
+  }
+
+  .row-name {
+    font-size: 11px;
+    color: var(--black);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+  }
+
+  .row-claimed-badge {
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: var(--cream);
+    color: var(--mid);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  /* ── RIGHT PANEL ── */
+  .right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--cream);
+  }
+
+  .right-header {
+    padding: 1.5rem 2rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .detail-suit-label {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .detail-suit-pip {
+    font-size: 13px;
+  }
+
+  .detail-name {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--black);
+    line-height: 1.1;
+    transition: opacity 0.35s;
+  }
+
+  .status-pill {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .status-pill.open {
+    background: #E6F2EC;
+    color: #1E6640;
+    border: 1px solid #B3D9C2;
+  }
+  .status-pill.claimed {
+    background: var(--cream);
+    color: var(--mid);
+    border: 1px solid var(--border);
+  }
+
+  /* Photo area with crossfade */
+  .photo-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: #D8D4CB;
+  }
+
+  .photo-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+  .photo-slide.visible { opacity: 1; }
+
+  .photo-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #999590;
+  }
+
+  .ph-icon {
+    font-size: 36px;
+    opacity: 0.5;
+  }
+
+  .ph-label {
+    font-size: 12px;
+    font-family: var(--font-mono);
+    color: #999590;
+  }
+
+  .ph-path {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: #bbb8b2;
+    margin-top: -4px;
+  }
+
+  /* Progress bar */
+  .progress-track {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgba(0,0,0,0.08);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--black);
+    width: 0%;
+    opacity: 0.35;
+    transition: width linear;
+  }
+
+  /* Footer bar */
+  .footer-bar {
+    padding: 10px 2rem;
+    border-top: 1px solid var(--border);
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .sync-info {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    color: var(--mid);
+  }
+
+  .sync-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #2B5C3F;
+    flex-shrink: 0;
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:0.35;transform:scale(0.65)}
+  }
+
+  .controls {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+  }
+
+  .ctrl-btn {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    padding: 5px 13px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--mid);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+  .ctrl-btn:hover { background: var(--cream); color: var(--black); }
+
+  .sheet-btn {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    padding: 5px 13px;
+    border-radius: 6px;
+    border: 1px solid rgba(26,58,107,0.3);
+    background: rgba(26,58,107,0.07);
+    color: var(--diamond);
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: opacity 0.15s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .sheet-btn:hover { opacity: 0.7; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- LEFT -->
+  <div class="left">
+    <div class="left-header">
+      <div class="eyebrow">AIGA Dallas · 2026</div>
+      <div class="left-title">The Deck</div>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-num" id="s-total">54</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="s-claimed">0</span>
+          <span class="stat-label">Claimed</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="s-open">54</span>
+          <span class="stat-label">Available</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="suit-filters">
+      <button class="suit-btn active" onclick="setFilter('all',this)">All</button>
+      <button class="suit-btn spades" onclick="setFilter('Spades',this)">♠ Spades</button>
+      <button class="suit-btn hearts" onclick="setFilter('Hearts',this)">♥ Hearts</button>
+      <button class="suit-btn clubs" onclick="setFilter('Clubs',this)">♣ Clubs</button>
+      <button class="suit-btn diamonds" onclick="setFilter('Diamonds',this)">♦ Diamonds</button>
+      <button class="suit-btn jokers" onclick="setFilter('Joker',this)">★ Jokers</button>
+    </div>
+
+    <div class="landmark-list" id="list"></div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="right-header">
+      <div>
+        <div class="detail-suit-label">
+          <span class="detail-suit-pip" id="d-pip">♠</span>
+          <span id="d-suit-label">Spades · Card 1</span>
+        </div>
+        <div class="detail-name" id="d-name">Reunion Tower</div>
+      </div>
+      <div class="status-pill open" id="d-status">Available</div>
+    </div>
+
+    <div class="photo-area" id="photo-area">
+      <div class="photo-slide visible" id="slide-a">
+        <div class="photo-placeholder">
+          <div class="ph-icon">♠</div>
+          <div class="ph-label">Reunion Tower</div>
+          <div class="ph-path">photos/1-reunion-tower.jpg</div>
+        </div>
+      </div>
+      <div class="photo-slide" id="slide-b"></div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress"></div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <div class="sync-info">
+        <div class="sync-dot"></div>
+        <span id="sync-label">Synced from Google Sheets · refreshes every 15s</span>
+      </div>
+      <div class="controls">
+        <button class="ctrl-btn" id="pause-btn" onclick="togglePause()">⏸ Pause</button>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+//  LANDMARKS DATA
+//  photo: set to 'photos/filename.jpg' once uploaded
+//  claimant: pulled from Google Sheet (see fetchSheet below)
+// ─────────────────────────────────────────────
+const LANDMARKS = [
+  { id:1,  num:1,  suit:'Spades',   pip:'♠', name:'Reunion Tower' },
+  { id:2,  num:2,  suit:'Spades',   pip:'♠', name:'Fountain Place Skyscraper' },
+  { id:3,  num:3,  suit:'Spades',   pip:'♠', name:'Margaret Hunt Hill Bridge' },
+  { id:4,  num:4,  suit:'Spades',   pip:'♠', name:'Dallas City Hall' },
+  { id:5,  num:5,  suit:'Spades',   pip:'♠', name:'Dallas County Courthouse' },
+  { id:6,  num:6,  suit:'Spades',   pip:'♠', name:'The Pegasus at the Magnolia Building' },
+  { id:7,  num:7,  suit:'Spades',   pip:'♠', name:'Dallas Holocaust and Human Rights Museum' },
+  { id:8,  num:8,  suit:'Spades',   pip:'♠', name:'AT&T Performing Arts Center – Winspear Opera House' },
+  { id:9,  num:9,  suit:'Spades',   pip:'♠', name:'Wyly Theatre' },
+  { id:10, num:10, suit:'Spades',   pip:'♠', name:'Myerson Symphony Hall' },
+  { id:11, num:11, suit:'Spades',   pip:'♠', name:'Cotton Bowl Stadium – Fair Park' },
+  { id:12, num:12, suit:'Spades',   pip:'♠', name:'Majestic Theater' },
+  { id:13, num:13, suit:'Spades',   pip:'♠', name:'Infomart' },
+  { id:14, num:14, suit:'Hearts',   pip:'♥', name:'AT&T Stadium' },
+  { id:15, num:15, suit:'Hearts',   pip:'♥', name:'Globe Life Field' },
+  { id:16, num:16, suit:'Hearts',   pip:'♥', name:'Fort Worth Water Gardens' },
+  { id:17, num:17, suit:'Hearts',   pip:'♥', name:'M-Line Trolley' },
+  { id:18, num:18, suit:'Hearts',   pip:'♥', name:'The Traveling Man Sculptures – Deep Ellum' },
+  { id:19, num:19, suit:'Hearts',   pip:'♥', name:'JFK Memorial' },
+  { id:20, num:20, suit:'Hearts',   pip:'♥', name:'Klyde Warren Park' },
+  { id:21, num:21, suit:'Hearts',   pip:'♥', name:'Perot Museum' },
+  { id:22, num:22, suit:'Hearts',   pip:'♥', name:'Nasher Sculpture Center' },
+  { id:23, num:23, suit:'Hearts',   pip:'♥', name:'Dallas Museum of Art' },
+  { id:24, num:24, suit:'Hearts',   pip:'♥', name:'Latino Cultural Center' },
+  { id:25, num:25, suit:'Hearts',   pip:'♥', name:'African American Museum – Fair Park' },
+  { id:26, num:26, suit:'Hearts',   pip:'♥', name:'The Giant Eyeball' },
+  { id:27, num:27, suit:'Clubs',    pip:'♣', name:'Dallas Zoo' },
+  { id:28, num:28, suit:'Clubs',    pip:'♣', name:'Booker T Washington High School' },
+  { id:29, num:29, suit:'Clubs',    pip:'♣', name:'Dallas World Aquarium' },
+  { id:30, num:30, suit:'Clubs',    pip:'♣', name:'Six Flags over Texas' },
+  { id:31, num:31, suit:'Clubs',    pip:'♣', name:'Big Tex – State Fair of Texas' },
+  { id:32, num:32, suit:'Clubs',    pip:'♣', name:'White Rock Lake' },
+  { id:33, num:33, suit:'Clubs',    pip:'♣', name:'Dallas Arboretum' },
+  { id:34, num:34, suit:'Clubs',    pip:'♣', name:'Trinity River' },
+  { id:35, num:35, suit:'Clubs',    pip:'♣', name:'Katy Trail' },
+  { id:36, num:36, suit:'Clubs',    pip:'♣', name:'Thanks-Giving Square' },
+  { id:37, num:37, suit:'Clubs',    pip:'♣', name:'Cathedral Santuario de Guadalupe' },
+  { id:38, num:38, suit:'Clubs',    pip:'♣', name:'Modern Art Museum of Fort Worth' },
+  { id:39, num:39, suit:'Clubs',    pip:'♣', name:'Bass Performance Hall' },
+  { id:40, num:40, suit:'Diamonds', pip:'♦', name:'Dallas Skyline' },
+  { id:41, num:41, suit:'Diamonds', pip:'♦', name:'Cedar Ridge Preserve' },
+  { id:42, num:42, suit:'Diamonds', pip:'♦', name:'Fort Worth Stock Yards' },
+  { id:43, num:43, suit:'Diamonds', pip:'♦', name:'American Airlines Center' },
+  { id:44, num:44, suit:'Diamonds', pip:'♦', name:'Union Station' },
+  { id:45, num:45, suit:'Diamonds', pip:'♦', name:'Sixth Floor Museum at Dealey Plaza' },
+  { id:46, num:46, suit:'Diamonds', pip:'♦', name:'Pioneer Plaza Cattle Drive' },
+  { id:47, num:47, suit:'Diamonds', pip:'♦', name:'Mustangs of Las Colinas' },
+  { id:48, num:48, suit:'Diamonds', pip:'♦', name:'Dallas Farmers Market' },
+  { id:49, num:49, suit:'Diamonds', pip:'♦', name:'Texas Motor Speedway' },
+  { id:50, num:50, suit:'Diamonds', pip:'♦', name:'Bishop Arts District' },
+  { id:51, num:51, suit:'Diamonds', pip:'♦', name:'Grapevine Vintage Railroad' },
+  { id:52, num:52, suit:'Diamonds', pip:'♦', name:'Billy Bob\'s Texas' },
+  { id:53, num:53, suit:'Joker',    pip:'★', name:'Sundance Square Ft Worth' },
+  { id:54, num:54, suit:'Joker',    pip:'★', name:'DART Rail' },
+].map(l => ({ ...l, claimant: null, photo: null }));
+
+// ─────────────────────────────────────────────
+//  GOOGLE SHEETS SYNC
+//  1. Publish your sheet: File → Share → Publish to web → CSV
+//  2. Paste the CSV URL below
+//  Sheet columns expected: id, claimant (designer name or blank)
+// ─────────────────────────────────────────────
+const SHEET_CSV_URL = ''; // ← paste your published CSV URL here
+
+async function fetchSheet() {
+  if (!SHEET_CSV_URL) return;
+  try {
+    const res = await fetch(SHEET_CSV_URL + '&t=' + Date.now());
+    const text = await res.text();
+    const rows = text.trim().split('\n').slice(1); // skip header row
+    rows.forEach(row => {
+      const cols = row.split(',');
+      const id = parseInt(cols[0]);
+      const claimant = (cols[1] || '').trim().replace(/^"|"$/g, '');
+      const landmark = LANDMARKS.find(l => l.id === id);
+      if (landmark) landmark.claimant = claimant || null;
+    });
+    updateSyncLabel('just now');
+    renderList();
+    const active = LANDMARKS.find(l => l.id === activeId);
+    if (active) renderDetail(active);
+  } catch(e) {
+    console.warn('Sheet fetch failed', e);
+  }
+}
+
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+let activeId = 1;
+let currentFilter = 'all';
+let paused = false;
+let rotateTimer = null;
+let currentSlot = 'a';
+let userSelected = false;
+let userSelectedTimer = null;
+const INTERVAL = 5000;
+
+function suitColor(suit) {
+  return { Spades:'#111110', Hearts:'#B83232', Clubs:'#2B5C3F', Diamonds:'#1A3A6B', Joker:'#6B3FA0' }[suit] || '#111110';
+}
+
+function slugify(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g,'');
+}
+
+function photoPath(l) {
+  return `photos/${l.id}-${slugify(l.name)}.jpg`;
+}
+
+function visibleLandmarks() {
+  return LANDMARKS.filter(l => {
+    if (currentFilter !== 'all' && l.suit !== currentFilter) return false;
+    return !l.claimant;
+  });
+}
+
+// ─────────────────────────────────────────────
+//  RENDER LIST
+// ─────────────────────────────────────────────
+function renderList() {
+  const claimed = LANDMARKS.filter(l => l.claimant).length;
+  document.getElementById('s-total').textContent = LANDMARKS.length;
+  document.getElementById('s-claimed').textContent = claimed;
+  document.getElementById('s-open').textContent = LANDMARKS.length - claimed;
+
+  const filtered = currentFilter === 'all'
+    ? LANDMARKS
+    : LANDMARKS.filter(l => l.suit === currentFilter);
+
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+
+  filtered.forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'landmark-row' + (l.id === activeId ? ' active' : '') + (l.claimant ? ' claimed' : '');
+    row.onclick = () => {
+      if (l.claimant) return;
+      activeId = l.id;
+      userSelected = true;
+      clearTimeout(userSelectedTimer);
+      userSelectedTimer = setTimeout(() => { userSelected = false; }, 12000);
+      renderList();
+      renderDetail(l);
+      resetProgress();
+    };
+    row.innerHTML = `
+      <div class="row-suit" style="color:${suitColor(l.suit)}">${l.pip}</div>
+      <div class="row-info">
+        <div class="row-num">${l.suit.toUpperCase()} · ${l.num}</div>
+        <div class="row-name">${l.name}</div>
+      </div>
+      ${l.claimant ? '<div class="row-claimed-badge">Claimed</div>' : ''}
+    `;
+    list.appendChild(row);
+  });
+
+  const activeRow = list.querySelector('.active');
+  if (activeRow) activeRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+// ─────────────────────────────────────────────
+//  RENDER DETAIL (crossfade)
+// ─────────────────────────────────────────────
+function renderDetail(l) {
+  const nextSlot = currentSlot === 'a' ? 'b' : 'a';
+  const nextSlide = document.getElementById('slide-' + nextSlot);
+  const color = suitColor(l.suit);
+
+  if (l.photo) {
+    nextSlide.innerHTML = `<img src="${l.photo}" alt="${l.name}" />`;
+  } else {
+    nextSlide.innerHTML = `
+      <div class="photo-placeholder">
+        <div class="ph-icon" style="color:${color};opacity:0.35">${l.pip}</div>
+        <div class="ph-label">${l.name}</div>
+        <div class="ph-path">${photoPath(l)}</div>
+      </div>`;
+  }
+
+  document.getElementById('d-pip').textContent = l.pip;
+  document.getElementById('d-pip').style.color = color;
+  document.getElementById('d-suit-label').textContent = `${l.suit} · Card ${l.num}`;
+  document.getElementById('d-name').textContent = l.name;
+
+  const status = document.getElementById('d-status');
+  status.textContent = l.claimant ? 'Claimed' : 'Available';
+  status.className = 'status-pill ' + (l.claimant ? 'claimed' : 'open');
+
+  const syncLabel = document.getElementById('sync-label');
+  syncLabel.textContent = l.claimant
+    ? `Claimed · synced from Google Sheets`
+    : `Available · synced from Google Sheets`;
+
+  const curSlide = document.getElementById('slide-' + currentSlot);
+  nextSlide.classList.add('visible');
+  setTimeout(() => {
+    curSlide.classList.remove('visible');
+    currentSlot = nextSlot;
+  }, 750);
+}
+
+// ─────────────────────────────────────────────
+//  ROTATION
+// ─────────────────────────────────────────────
+function advance() {
+  if (paused || userSelected) return;
+  const vis = visibleLandmarks();
+  if (!vis.length) return;
+  const idx = vis.findIndex(l => l.id === activeId);
+  const next = vis[(idx + 1) % vis.length];
+  activeId = next.id;
+  renderList();
+  renderDetail(next);
+}
+
+function resetProgress() {
+  const bar = document.getElementById('progress');
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if (!paused) {
+        bar.style.transition = `width ${INTERVAL}ms linear`;
+        bar.style.width = '100%';
+      }
+    });
+  });
+}
+
+function togglePause() {
+  paused = !paused;
+  const btn = document.getElementById('pause-btn');
+  if (paused) {
+    btn.textContent = '▶ Play';
+    clearInterval(rotateTimer);
+    const bar = document.getElementById('progress');
+    const w = parseFloat(getComputedStyle(bar).width);
+    const pw = parseFloat(getComputedStyle(bar.parentElement).width);
+    bar.style.transition = 'none';
+    bar.style.width = Math.round(w / pw * 100) + '%';
+  } else {
+    btn.textContent = '⏸ Pause';
+    resetProgress();
+    rotateTimer = setInterval(() => { advance(); resetProgress(); }, INTERVAL);
+  }
+}
+
+// ─────────────────────────────────────────────
+//  FILTER
+// ─────────────────────────────────────────────
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.suit-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const vis = visibleLandmarks();
+  if (!vis.find(l => l.id === activeId)) {
+    activeId = vis[0]?.id || LANDMARKS[0].id;
+  }
+  renderList();
+  const active = LANDMARKS.find(l => l.id === activeId);
+  if (active) renderDetail(active);
+  resetProgress();
+}
+
+function updateSyncLabel(when) {
+  const label = document.getElementById('sync-label');
+  if (label.textContent.includes('Claimed')) return;
+  label.textContent = `Available · synced ${when}`;
+}
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+renderList();
+renderDetail(LANDMARKS[0]);
+resetProgress();
+rotateTimer = setInterval(() => { advance(); resetProgress(); }, INTERVAL);
+
+// Fetch sheet on load and every 15 seconds
+fetchSheet();
+setInterval(fetchSheet, 15000);
+</script>
+</body>
+</html>
