@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   :root {
     --black: #111110;
     --white: #F7F5F0;
@@ -25,23 +25,23 @@
     --font-display: 'Playfair Display', Georgia, serif;
     --font-mono: 'IBM Plex Mono', monospace;
   }
-
+ 
   html, body {
     height: 100%;
     background: var(--cream);
     color: var(--black);
     font-family: var(--font-mono);
   }
-
+ 
   .app {
     display: flex;
     height: 100vh;
     min-height: 600px;
   }
-
+ 
   /* ── LEFT PANEL ── */
   .left {
-    width: 300px;
+    width: 380px;
     flex-shrink: 0;
     background: var(--white);
     border-right: 1px solid var(--border);
@@ -49,12 +49,12 @@
     flex-direction: column;
     overflow: hidden;
   }
-
+ 
   .left-header {
     padding: 1.5rem 1.5rem 1.1rem;
     border-bottom: 1px solid var(--border);
   }
-
+ 
   .eyebrow {
     font-size: 9px;
     letter-spacing: 0.18em;
@@ -62,58 +62,59 @@
     color: var(--mid);
     margin-bottom: 6px;
   }
-
+ 
   .left-title {
     font-family: var(--font-display);
-    font-size: 24px;
+    font-size: 32px;
     font-weight: 400;
     color: var(--black);
     line-height: 1.1;
     margin-bottom: 14px;
   }
-
+ 
   .stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
   }
-
+ 
   .stat {
     background: var(--cream);
     border-radius: 6px;
     padding: 7px 5px;
     text-align: center;
   }
-
+ 
   .stat-num {
     display: block;
     font-family: var(--font-display);
-    font-size: 20px;
+    font-size: 28px;
     font-weight: 400;
     color: var(--black);
   }
-
+ 
   .stat-label {
     display: block;
-    font-size: 8px;
+    font-size: 10px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--mid);
     margin-top: 1px;
   }
-
+ 
   .suit-filters {
     display: flex;
     gap: 4px;
-    padding: 10px 1.5rem;
+    padding: 8px 1rem;
     border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
   }
-
+ 
   .suit-btn {
-    font-size: 10px;
+    font-size: 11px;
     font-family: var(--font-mono);
-    padding: 3px 10px;
+    padding: 4px 9px;
     border-radius: 20px;
     border: 1px solid var(--border);
     background: transparent;
@@ -122,9 +123,11 @@
     transition: all 0.15s;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
-
+ 
   .suit-btn:hover { background: var(--cream); }
   .suit-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
   .suit-btn.active.spades { background: var(--spade); border-color: var(--spade); }
@@ -132,18 +135,18 @@
   .suit-btn.active.clubs  { background: var(--club);  border-color: var(--club); }
   .suit-btn.active.diamonds { background: var(--diamond); border-color: var(--diamond); }
   .suit-btn.active.jokers { background: var(--joker); border-color: var(--joker); }
-
+ 
   .landmark-list {
     overflow-y: auto;
     flex: 1;
   }
   .landmark-list::-webkit-scrollbar { width: 3px; }
   .landmark-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
+ 
   .landmark-row {
     display: flex;
     align-items: center;
-    padding: 10px 1.5rem;
+    padding: 13px 1.5rem;
     cursor: pointer;
     border-bottom: 1px solid var(--border);
     transition: background 0.1s;
@@ -152,44 +155,44 @@
   .landmark-row:hover { background: var(--cream); }
   .landmark-row.active { background: var(--cream); }
   .landmark-row.claimed { opacity: 0.4; pointer-events: none; }
-
+ 
   .row-suit {
-    font-size: 14px;
+    font-size: 18px;
     flex-shrink: 0;
-    width: 18px;
+    width: 22px;
     text-align: center;
   }
-
+ 
   .row-info { flex: 1; min-width: 0; }
-
+ 
   .row-num {
-    font-size: 9px;
+    font-size: 11px;
     color: var(--mid);
     letter-spacing: 0.06em;
     margin-bottom: 1px;
   }
-
+ 
   .row-name {
-    font-size: 11px;
+    font-size: 16px;
     color: var(--black);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.3;
   }
-
+ 
   .row-claimed-badge {
-    font-size: 8px;
+    font-size: 10px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 2px 6px;
+    padding: 3px 8px;
     border-radius: 8px;
     background: var(--cream);
     color: var(--mid);
     border: 1px solid var(--border);
     flex-shrink: 0;
   }
-
+ 
   /* ── RIGHT PANEL ── */
   .right {
     flex: 1;
@@ -198,7 +201,7 @@
     overflow: hidden;
     background: var(--cream);
   }
-
+ 
   .right-header {
     padding: 1.5rem 2rem 1.1rem;
     border-bottom: 1px solid var(--border);
@@ -208,8 +211,7 @@
     justify-content: space-between;
     gap: 1rem;
   }
-
-<<<<<<< HEAD
+ 
   .detail-year-label {
     font-size: 11px;
     letter-spacing: 0.18em;
@@ -218,7 +220,7 @@
     margin-bottom: 5px;
     font-family: var(--font-mono);
   }
-
+ 
   .fact-bar {
     padding: 10px 2rem;
     border-bottom: 1px solid var(--border);
@@ -231,51 +233,36 @@
     font-family: var(--font-mono);
     line-height: 1.5;
   }
-
+ 
   .fact-icon {
     color: var(--joker);
     font-size: 11px;
     flex-shrink: 0;
     margin-top: 2px;
-=======
-  .detail-suit-label {
-    font-size: 9px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--mid);
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
   }
-
-  .detail-suit-pip {
-    font-size: 13px;
->>>>>>> parent of 5514944 (Updated index)
-  }
-
+ 
   .detail-name {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: 52px;
     font-weight: 400;
     color: var(--black);
     line-height: 1.1;
     transition: opacity 0.35s;
   }
-
+ 
   .detail-address {
     font-size: 13px;
     color: var(--mid);
     font-family: var(--font-mono);
     margin-top: 5px;
   }
-
+ 
   .status-pill {
-    font-size: 10px;
+    font-size: 13px;
     font-family: var(--font-mono);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 5px 14px;
+    padding: 7px 18px;
     border-radius: 20px;
     flex-shrink: 0;
     margin-top: 6px;
@@ -290,7 +277,7 @@
     color: var(--mid);
     border: 1px solid var(--border);
   }
-
+ 
   /* Photo area with crossfade */
   .photo-area {
     flex: 1;
@@ -298,7 +285,7 @@
     overflow: hidden;
     background: #D8D4CB;
   }
-
+ 
   .photo-slide {
     position: absolute;
     inset: 0;
@@ -306,14 +293,14 @@
     transition: opacity 0.7s ease;
   }
   .photo-slide.visible { opacity: 1; }
-
+ 
   .photo-slide img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
-
+ 
   .photo-placeholder {
     width: 100%;
     height: 100%;
@@ -324,25 +311,25 @@
     gap: 10px;
     color: #999590;
   }
-
+ 
   .ph-icon {
     font-size: 36px;
     opacity: 0.5;
   }
-
+ 
   .ph-label {
     font-size: 12px;
     font-family: var(--font-mono);
     color: #999590;
   }
-
+ 
   .ph-path {
     font-size: 10px;
     font-family: var(--font-mono);
     color: #bbb8b2;
     margin-top: -4px;
   }
-
+ 
   /* Progress bar */
   .progress-track {
     position: absolute;
@@ -352,7 +339,7 @@
     height: 2px;
     background: rgba(0,0,0,0.08);
   }
-
+ 
   .progress-fill {
     height: 100%;
     background: var(--black);
@@ -360,7 +347,7 @@
     opacity: 0.35;
     transition: width linear;
   }
-
+ 
   /* Footer bar */
   .footer-bar {
     padding: 10px 2rem;
@@ -371,15 +358,15 @@
     justify-content: space-between;
     gap: 1rem;
   }
-
+ 
   .sync-info {
     display: flex;
     align-items: center;
     gap: 7px;
-    font-size: 11px;
+    font-size: 13px;
     color: var(--mid);
   }
-
+ 
   .sync-dot {
     width: 6px; height: 6px;
     border-radius: 50%;
@@ -387,22 +374,22 @@
     flex-shrink: 0;
     animation: pulse 2.2s ease-in-out infinite;
   }
-
+ 
   @keyframes pulse {
     0%,100%{opacity:1;transform:scale(1)}
     50%{opacity:0.35;transform:scale(0.65)}
   }
-
+ 
   .controls {
     display: flex;
     gap: 7px;
     align-items: center;
   }
-
+ 
   .ctrl-btn {
-    font-size: 10px;
+    font-size: 13px;
     font-family: var(--font-mono);
-    padding: 5px 13px;
+    padding: 7px 16px;
     border-radius: 6px;
     border: 1px solid var(--border);
     background: transparent;
@@ -412,7 +399,7 @@
     letter-spacing: 0.05em;
   }
   .ctrl-btn:hover { background: var(--cream); color: var(--black); }
-
+ 
   .sheet-btn {
     font-size: 10px;
     font-family: var(--font-mono);
@@ -432,7 +419,7 @@
 </head>
 <body>
 <div class="app">
-
+ 
   <!-- LEFT -->
   <div class="left">
     <div class="left-header">
@@ -452,7 +439,7 @@
         </div>
       </div>
     </div>
-
+ 
     <div class="suit-filters">
       <button class="suit-btn active" onclick="setFilter('all',this)">All</button>
       <button class="suit-btn spades" onclick="setFilter('Spades',this)">♠ Spades</button>
@@ -461,10 +448,10 @@
       <button class="suit-btn diamonds" onclick="setFilter('Diamonds',this)">♦ Diamonds</button>
       <button class="suit-btn jokers" onclick="setFilter('Joker',this)">★ Jokers</button>
     </div>
-
+ 
     <div class="landmark-list" id="list"></div>
   </div>
-
+ 
   <!-- RIGHT -->
   <div class="right">
     <div class="right-header">
@@ -481,7 +468,7 @@
       <span class="fact-icon">★</span>
       <span id="d-fact">One of the most recognizable landmarks on the Dallas skyline.</span>
     </div>
-
+ 
     <div class="photo-area" id="photo-area">
       <div class="photo-slide visible" id="slide-a">
         <div class="photo-placeholder">
@@ -495,7 +482,7 @@
         <div class="progress-fill" id="progress"></div>
       </div>
     </div>
-
+ 
     <div class="footer-bar">
       <div class="sync-info">
         <div class="sync-dot"></div>
@@ -503,13 +490,13 @@
       </div>
       <div class="controls">
         <button class="ctrl-btn" id="pause-btn" onclick="togglePause()">⏸ Pause</button>
-
+ 
       </div>
     </div>
   </div>
-
+ 
 </div>
-
+ 
 <script>
 // ─────────────────────────────────────────────
 //  LANDMARKS DATA
@@ -517,7 +504,6 @@
 //  claimant: pulled from Google Sheet (see fetchSheet below)
 // ─────────────────────────────────────────────
 const LANDMARKS = [
-<<<<<<< HEAD
   { id:1,  num:'A', suit:'Spades',   pip:'♤', name:'Reunion Tower',                                    address:'300 Reunion Blvd, Dallas, TX',              year:1978, fact:'Its 259 LED lights can display over 16 million color combinations — the globe is programmed for every major Dallas holiday and sports event.',  photo:'photos/01-reunion-tower.jpeg' },
   { id:2,  num:'2', suit:'Spades',   pip:'♤', name:'Fountain Place Skyscraper',                        address:'1445 Ross Ave, Dallas, TX',                 year:1986, fact:'Designed by I.M. Pei, its 172 dancing fountains at the base give the building its name. The glass facade shifts color throughout the day.',  photo:'photos/02-fountain-place-skyscraper.jpg' },
   { id:3,  num:'3', suit:'Spades',   pip:'♤', name:'Margaret Hunt Hill Bridge',                        address:'Singleton Blvd & Sylvan Ave, Dallas, TX',   year:2012, fact:'Designed by Santiago Calatrava, the single white arch soars 400 feet — the same height as a 40-story building.',  photo:'photos/03-margaret-hunt-hill-bridge.jpg' },
@@ -572,84 +558,41 @@ const LANDMARKS = [
   { id:52, num:'K', suit:'Diamonds', pip:'♢', name:'Billy Bob\'s Texas',                               address:'2520 Rodeo Plaza, Fort Worth, TX',          year:1981, fact:'The world\'s largest honky-tonk holds 6,000 people and has 40 bar stations — it was built inside a 1930s cattle barn from the Fort Worth Stock Show.',  photo:'photos/52-billy-bobs-texas.jpg' },
   { id:53, num:'JOKER 1', suit:'Joker', pip:'★', name:'Sundance Square Ft Worth',                      address:'420 Main St, Fort Worth, TX',               year:1982, fact:'Named after the Sundance Kid, who reportedly hid out in Fort Worth\'s Hell\'s Half Acre nearby — now a 35-block entertainment district.',  photo:'photos/53-sundance-square.jpg' },
   { id:54, num:'JOKER 2', suit:'Joker', pip:'★', name:'DART Rail',                                     address:'1401 Pacific Ave, Dallas, TX',              year:1996, fact:'DART operates the longest light rail network in the US at 93 miles — connecting 13 cities across the Metroplex.',  photo:'photos/54-dart-rail.jpg' },
-=======
-  { id:1,  num:1,  suit:'Spades',   pip:'♠', name:'Reunion Tower',                              photo:'photos/01-reunion-tower.jpeg' },
-  { id:2,  num:2,  suit:'Spades',   pip:'♠', name:'Fountain Place Skyscraper',                  photo:'photos/02-fountain-place-skyscraper.jpg' },
-  { id:3,  num:3,  suit:'Spades',   pip:'♠', name:'Margaret Hunt Hill Bridge',                  photo:'photos/03-margaret-hunt-hill-bridge.jpg' },
-  { id:4,  num:4,  suit:'Spades',   pip:'♠', name:'Dallas City Hall',                           photo:'photos/04-dallas-city-hall.jpg' },
-  { id:5,  num:5,  suit:'Spades',   pip:'♠', name:'Dallas County Courthouse',                   photo:'photos/05-dallas-county-courthouse.jpg' },
-  { id:6,  num:6,  suit:'Spades',   pip:'♠', name:'The Pegasus at the Magnolia Building',       photo:'photos/06-the-pegasus-at-the-magnolia-building.jpeg' },
-  { id:7,  num:7,  suit:'Spades',   pip:'♠', name:'Dallas Holocaust and Human Rights Museum',   photo:'photos/07-dallas-holocaust-and-human-rights-museum.png' },
-  { id:8,  num:8,  suit:'Spades',   pip:'♠', name:'AT&T Performing Arts Center – Winspear Opera House', photo:'photos/08-winspear-opera-house.jpg' },
-  { id:9,  num:9,  suit:'Spades',   pip:'♠', name:'Wyly Theatre',                               photo:'photos/09-wyly-theatre.jpg' },
-  { id:10, num:10, suit:'Spades',   pip:'♠', name:'Myerson Symphony Hall',                      photo:'photos/10-meyerson-symphony-hall.jpg' },
-  { id:11, num:11, suit:'Spades',   pip:'♠', name:'Cotton Bowl Stadium – Fair Park',            photo:'photos/11-cotton-bowl-stadium.jpg' },
-  { id:12, num:12, suit:'Spades',   pip:'♠', name:'Majestic Theater',                           photo:'photos/12-majestic-theater.jpg' },
-  { id:13, num:13, suit:'Spades',   pip:'♠', name:'Infomart',                                   photo:'photos/13-infomart.jpg' },
-  { id:14, num:14, suit:'Hearts',   pip:'♥', name:'AT&T Stadium',                               photo:'photos/14-att-stadium.jpg' },
-  { id:15, num:15, suit:'Hearts',   pip:'♥', name:'Globe Life Field',                           photo:'photos/15-globe-life-field.jpg' },
-  { id:16, num:16, suit:'Hearts',   pip:'♥', name:'Fort Worth Water Gardens',                   photo:'photos/16-fort-worth-water-gardens.jpg' },
-  { id:17, num:17, suit:'Hearts',   pip:'♥', name:'M-Line Trolley',                             photo:'photos/17-mline-trolley.jpg' },
-  { id:18, num:18, suit:'Hearts',   pip:'♥', name:'The Traveling Man Sculptures – Deep Ellum',  photo:'photos/18-the-travelling-man.jpg' },
-  { id:19, num:19, suit:'Hearts',   pip:'♥', name:'JFK Memorial',                               photo:'photos/19-jfk-memorial.jpg' },
-  { id:20, num:20, suit:'Hearts',   pip:'♥', name:'Klyde Warren Park',                          photo:'photos/20-klyde-warren-park.jpg' },
-  { id:21, num:21, suit:'Hearts',   pip:'♥', name:'Perot Museum',                               photo:'photos/21-perot-museum.jpg' },
-  { id:22, num:22, suit:'Hearts',   pip:'♥', name:'Nasher Sculpture Center',                    photo:'photos/22-nasher-sculpture-center.jpg' },
-  { id:23, num:23, suit:'Hearts',   pip:'♥', name:'Dallas Museum of Art',                       photo:'photos/23-dallas-museum-of-art.jpg' },
-  { id:24, num:24, suit:'Hearts',   pip:'♥', name:'Latino Cultural Center',                     photo:'photos/24-latino-cultural-center.jpg' },
-  { id:25, num:25, suit:'Hearts',   pip:'♥', name:'African American Museum – Fair Park',        photo:'photos/25-african-american-museum.jpg' },
-  { id:26, num:26, suit:'Hearts',   pip:'♥', name:'The Giant Eyeball',                          photo:'photos/26-the-giant-eyeball.jpg' },
-  { id:27, num:27, suit:'Clubs',    pip:'♣', name:'Dallas Zoo',                                 photo:'photos/27-dallas-zoo.jpg' },
-  { id:28, num:28, suit:'Clubs',    pip:'♣', name:'Booker T Washington High School',            photo:'photos/28-booker-t-washington-high-school.jpg' },
-  { id:29, num:29, suit:'Clubs',    pip:'♣', name:'Dallas World Aquarium',                      photo:'photos/29-dallas-world-aquarium.jpeg' },
-  { id:30, num:30, suit:'Clubs',    pip:'♣', name:'Six Flags over Texas',                       photo:'photos/30-six-flags-over-texas.jpg' },
-  { id:31, num:31, suit:'Clubs',    pip:'♣', name:'Big Tex – State Fair of Texas',              photo:'photos/31-big-tex.jpeg' },
-  { id:32, num:32, suit:'Clubs',    pip:'♣', name:'White Rock Lake',                            photo:'photos/32-white-rock-lake.jpg' },
-  { id:33, num:33, suit:'Clubs',    pip:'♣', name:'Dallas Arboretum',                           photo:'photos/33-dallas-arboretum.jpg' },
-  { id:34, num:34, suit:'Clubs',    pip:'♣', name:'Trinity River',                              photo:'photos/34-trinity-river.jpg' },
-  { id:35, num:35, suit:'Clubs',    pip:'♣', name:'Katy Trail',                                 photo:'photos/35-katy-trail.jpg' },
-  { id:36, num:36, suit:'Clubs',    pip:'♣', name:'Thanks-Giving Square',                       photo:'photos/36-thanks-giving-square.webp' },
-  { id:37, num:37, suit:'Clubs',    pip:'♣', name:'Cathedral Santuario de Guadalupe',           photo:'photos/37-cathedral-santuario-de-guadalupe.jpg' },
-  { id:38, num:38, suit:'Clubs',    pip:'♣', name:'Modern Art Museum of Fort Worth',            photo:'photos/38-modern-art-museum-of-fort-worth.jpg' },
-  { id:39, num:39, suit:'Clubs',    pip:'♣', name:'Bass Performance Hall',                      photo:'photos/39-bass-performance-hall.jpg' },
-  { id:40, num:40, suit:'Diamonds', pip:'♦', name:'Dallas Skyline',                             photo:'photos/40-dallas-skyline.jpg' },
-  { id:41, num:41, suit:'Diamonds', pip:'♦', name:'Cedar Ridge Preserve',                       photo:'photos/41-cedar-ridge-preserve.png' },
-  { id:42, num:42, suit:'Diamonds', pip:'♦', name:'Fort Worth Stock Yards',                     photo:'photos/42-fort-worth-stock-yards.jpg' },
-  { id:43, num:43, suit:'Diamonds', pip:'♦', name:'American Airlines Center',                   photo:'photos/43-american-airlines-center.jpg' },
-  { id:44, num:44, suit:'Diamonds', pip:'♦', name:'Union Station',                              photo:'photos/44-union-station.jpg' },
-  { id:45, num:45, suit:'Diamonds', pip:'♦', name:'Sixth Floor Museum at Dealey Plaza',         photo:'photos/45-sixth-floor-museum.jpg' },
-  { id:46, num:46, suit:'Diamonds', pip:'♦', name:'Pioneer Plaza Cattle Drive',                 photo:'photos/46-pioneer-plaza-cattle-drive.jpg' },
-  { id:47, num:47, suit:'Diamonds', pip:'♦', name:'Mustangs of Las Colinas',                    photo:'photos/47-mustangs-of-las-colinas.jpg' },
-  { id:48, num:48, suit:'Diamonds', pip:'♦', name:'Dallas Farmers Market',                      photo:'photos/48-dallas-farmers-market.jpg' },
-  { id:49, num:49, suit:'Diamonds', pip:'♦', name:'Texas Motor Speedway',                       photo:'photos/49-texas-motor-speedway.webp' },
-  { id:50, num:50, suit:'Diamonds', pip:'♦', name:'Bishop Arts District',                       photo:'photos/50-bishop-arts-district.jpg' },
-  { id:51, num:51, suit:'Diamonds', pip:'♦', name:'Grapevine Vintage Railroad',                 photo:'photos/51-grapevine-vintage-railroad.jpg' },
-  { id:52, num:52, suit:'Diamonds', pip:'♦', name:'Billy Bob\'s Texas',                         photo:'photos/52-billy-bobs-texas.jpg' },
-  { id:53, num:53, suit:'Joker',    pip:'★', name:'Sundance Square Ft Worth',                   photo:'photos/53-sundance-square.jpg' },
-  { id:54, num:54, suit:'Joker',    pip:'★', name:'DART Rail',                                  photo:'photos/54-dart-rail.jpg' },
->>>>>>> parent of 5514944 (Updated index)
 ].map(l => ({ ...l, claimant: null }));
-
+ 
 // ─────────────────────────────────────────────
 //  GOOGLE SHEETS SYNC
 //  1. Publish your sheet: File → Share → Publish to web → CSV
 //  2. Paste the CSV URL below
 //  Sheet columns expected: id, claimant (designer name or blank)
 // ─────────────────────────────────────────────
-const SHEET_CSV_URL = ''; // ← paste your published CSV URL here
-
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQrdIcS--91KhRdhkkfYp4SfZqDuGaTlGjxgDL5LHbq3f4ocBjM7sTDzQiL1Sbalg/pub?gid=231679729&single=true&output=csv';
+ 
+function parseCSVRow(row) {
+  // Handle quoted fields with commas inside
+  const result = [];
+  let cur = '', inQuote = false;
+  for (let i = 0; i < row.length; i++) {
+    const ch = row[i];
+    if (ch === '"') { inQuote = !inQuote; }
+    else if (ch === ',' && !inQuote) { result.push(cur.trim()); cur = ''; }
+    else { cur += ch; }
+  }
+  result.push(cur.trim());
+  return result;
+}
+ 
 async function fetchSheet() {
   if (!SHEET_CSV_URL) return;
   try {
     const res = await fetch(SHEET_CSV_URL + '&t=' + Date.now());
     const text = await res.text();
     const rows = text.trim().split('\n').slice(1); // skip header row
-    rows.forEach(row => {
-      const cols = row.split(',');
-      const id = parseInt(cols[0]);
-      const claimant = (cols[1] || '').trim().replace(/^"|"$/g, '');
-      const landmark = LANDMARKS.find(l => l.id === id);
-      if (landmark) landmark.claimant = claimant || null;
+    rows.forEach((row, i) => {
+      const cols = parseCSVRow(row);
+      const designer = (cols[3] || '').replace(/^"|"$/g, '').trim(); // column D = DESIGNER
+      const landmark = LANDMARKS[i];
+      if (landmark) landmark.claimant = designer || null;
     });
     updateSyncLabel('just now');
     renderList();
@@ -659,7 +602,7 @@ async function fetchSheet() {
     console.warn('Sheet fetch failed', e);
   }
 }
-
+ 
 // ─────────────────────────────────────────────
 //  STATE
 // ─────────────────────────────────────────────
@@ -671,27 +614,27 @@ let currentSlot = 'a';
 let userSelected = false;
 let userSelectedTimer = null;
 const INTERVAL = 5000;
-
+ 
 function suitColor(suit) {
   return { Spades:'#111110', Hearts:'#B83232', Clubs:'#2B5C3F', Diamonds:'#1A3A6B', Joker:'#6B3FA0' }[suit] || '#111110';
 }
-
+ 
 function slugify(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g,'');
 }
-
+ 
 function photoPath(l) {
   const pad = String(l.id).padStart(2, '0');
   return `photos/${pad}-${slugify(l.name)}.jpg`;
 }
-
+ 
 function visibleLandmarks() {
   return LANDMARKS.filter(l => {
     if (currentFilter !== 'all' && l.suit !== currentFilter) return false;
     return !l.claimant;
   });
 }
-
+ 
 // ─────────────────────────────────────────────
 //  RENDER LIST
 // ─────────────────────────────────────────────
@@ -700,14 +643,14 @@ function renderList() {
   document.getElementById('s-total').textContent = LANDMARKS.length;
   document.getElementById('s-claimed').textContent = claimed;
   document.getElementById('s-open').textContent = LANDMARKS.length - claimed;
-
+ 
   const filtered = currentFilter === 'all'
     ? LANDMARKS
     : LANDMARKS.filter(l => l.suit === currentFilter);
-
+ 
   const list = document.getElementById('list');
   list.innerHTML = '';
-
+ 
   filtered.forEach(l => {
     const row = document.createElement('div');
     row.className = 'landmark-row' + (l.id === activeId ? ' active' : '') + (l.claimant ? ' claimed' : '');
@@ -731,11 +674,11 @@ function renderList() {
     `;
     list.appendChild(row);
   });
-
+ 
   const activeRow = list.querySelector('.active');
   if (activeRow) activeRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
-
+ 
 // ─────────────────────────────────────────────
 //  RENDER DETAIL (crossfade)
 // ─────────────────────────────────────────────
@@ -743,7 +686,7 @@ function renderDetail(l) {
   const nextSlot = currentSlot === 'a' ? 'b' : 'a';
   const nextSlide = document.getElementById('slide-' + nextSlot);
   const color = suitColor(l.suit);
-
+ 
   if (l.photo) {
     nextSlide.innerHTML = `<img src="${l.photo}" alt="${l.name}" />`;
   } else {
@@ -754,28 +697,21 @@ function renderDetail(l) {
         <div class="ph-path">${photoPath(l)}</div>
       </div>`;
   }
-
-  document.getElementById('d-pip').textContent = l.pip;
-  document.getElementById('d-pip').style.color = color;
-<<<<<<< HEAD
-  document.getElementById('d-suit-label').textContent = `${l.suit} · ${l.num}`;
+ 
   document.getElementById('d-year-label').textContent = l.year ? `Est. ${l.year}` : 'Dallas, TX';
-=======
-  document.getElementById('d-suit-label').textContent = `${l.suit} · Card ${l.num}`;
->>>>>>> parent of 5514944 (Updated index)
   document.getElementById('d-name').textContent = l.name;
   document.getElementById('d-address').textContent = l.address || '';
   document.getElementById('d-fact').textContent = l.fact || '';
-
+ 
   const status = document.getElementById('d-status');
   status.textContent = l.claimant ? 'Claimed' : 'Available';
   status.className = 'status-pill ' + (l.claimant ? 'claimed' : 'open');
-
+ 
   const syncLabel = document.getElementById('sync-label');
   syncLabel.textContent = l.claimant
     ? `Claimed · synced from Google Sheets`
     : `Available · synced from Google Sheets`;
-
+ 
   const curSlide = document.getElementById('slide-' + currentSlot);
   nextSlide.classList.add('visible');
   setTimeout(() => {
@@ -783,7 +719,7 @@ function renderDetail(l) {
     currentSlot = nextSlot;
   }, 750);
 }
-
+ 
 // ─────────────────────────────────────────────
 //  ROTATION
 // ─────────────────────────────────────────────
@@ -797,7 +733,7 @@ function advance() {
   renderList();
   renderDetail(next);
 }
-
+ 
 function resetProgress() {
   const bar = document.getElementById('progress');
   bar.style.transition = 'none';
@@ -811,7 +747,7 @@ function resetProgress() {
     });
   });
 }
-
+ 
 function togglePause() {
   paused = !paused;
   const btn = document.getElementById('pause-btn');
@@ -829,7 +765,7 @@ function togglePause() {
     rotateTimer = setInterval(() => { advance(); resetProgress(); }, INTERVAL);
   }
 }
-
+ 
 // ─────────────────────────────────────────────
 //  FILTER
 // ─────────────────────────────────────────────
@@ -846,13 +782,13 @@ function setFilter(f, btn) {
   if (active) renderDetail(active);
   resetProgress();
 }
-
+ 
 function updateSyncLabel(when) {
   const label = document.getElementById('sync-label');
   if (label.textContent.includes('Claimed')) return;
   label.textContent = `Available · synced ${when}`;
 }
-
+ 
 // ─────────────────────────────────────────────
 //  INIT
 // ─────────────────────────────────────────────
@@ -860,10 +796,11 @@ renderList();
 renderDetail(LANDMARKS[0]);
 resetProgress();
 rotateTimer = setInterval(() => { advance(); resetProgress(); }, INTERVAL);
-
+ 
 // Fetch sheet on load and every 15 seconds
 fetchSheet();
 setInterval(fetchSheet, 15000);
 </script>
 </body>
 </html>
+ 
