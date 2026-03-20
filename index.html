@@ -614,6 +614,12 @@ async function fetchSheet() {
     const text = await res.text();
     const rows = text.trim().split('\n').slice(1); // skip header row
 
+    // Sanity check — if sheet returns fewer rows than landmarks, it's a bad/partial response
+    if (rows.length < LANDMARKS.length) {
+      console.warn('Incomplete sheet response, skipping update');
+      return;
+    }
+
     // Build new claimant map fully before touching LANDMARKS
     const newClaimants = {};
     rows.forEach((row, i) => {
@@ -634,7 +640,6 @@ async function fetchSheet() {
       LANDMARKS.forEach(l => {
         if (newClaimants.hasOwnProperty(l.id)) l.claimant = newClaimants[l.id];
       });
-      updateSyncLabel('just now');
       renderList();
       const activeL = [OVERVIEW, ...LANDMARKS].find(l => l.id === activeId);
       if (activeL) renderDetail(activeL);
@@ -781,8 +786,9 @@ function renderDetail(l) {
 // ─────────────────────────────────────────────
 //  ROTATION
 // ─────────────────────────────────────────────
-function advance() {
+async function advance() {
   if (paused || userSelected) return;
+  await fetchSheet();
   const vis = visibleLandmarks();
   if (!vis.length) return;
   const idx = vis.findIndex(l => l.id === activeId);
@@ -861,9 +867,8 @@ renderDetail(OVERVIEW);
 resetProgress();
 rotateTimer = setInterval(() => { advance(); resetProgress(); }, INTERVAL);
 
-// Fetch sheet on load and every 15 seconds
+// Fetch sheet on load, then updates happen before each slide swap
 fetchSheet();
-setInterval(fetchSheet, 5000);
 </script>
 </body>
 </html>
