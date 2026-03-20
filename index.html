@@ -874,8 +874,9 @@ renderDetail(OVERVIEW);
 resetProgress();
 rotateTimer = setInterval(() => { advance(); resetProgress(); }, INTERVAL);
 
-// Fetch sheet once on load only
+// Fetch sheet once on load, then every 30s (matches Google's ~30s CSV propagation delay)
 fetchSheet();
+setInterval(fetchSheet, 30000);
 </script>
 </body>
 </html>
