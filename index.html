@@ -277,8 +277,42 @@
     color: var(--mid);
     border: 1px solid var(--border);
   }
+  /* Overview grid */
+  .overview-grid {
+    width: 100%; height: 100%;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 2px;
+    background: var(--black);
+    padding: 2px;
+  }
+  .overview-cell {
+    overflow: hidden;
+    position: relative;
+    background: #2a2a28;
+  }
+  .overview-cell img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.9;
+  }
+  .overview-cell .ov-name {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.6);
+    color: #F7F5F0;
+    font-size: 6px;
+    font-family: var(--font-mono);
+    padding: 2px 3px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .overview-cell.claimed img { opacity: 0.25; }
 
-  /* Photo area with crossfade */
   .photo-area {
     flex: 1;
     position: relative;
@@ -462,7 +496,7 @@
 
     <div class="photo-area" id="photo-area">
       <div class="photo-slide visible" id="slide-a">
-        <div class="photo-placeholder">
+              <div class="photo-placeholder">
           <div class="ph-icon">♠</div>
           <div class="ph-label">Reunion Tower</div>
           <div class="ph-path">photos/1-reunion-tower.jpg</div>
@@ -618,8 +652,10 @@ function photoPath(l) {
   return `photos/${pad}-${slugify(l.name)}.jpg`;
 }
 
+const OVERVIEW = { id:0, name:'All Landmarks', suit:'Overview', pip:'', year:'The Deck 2026', address:'DFW Metroplex, TX', fact:'54 Dallas–Fort Worth landmarks — one for each card in the deck. Click a landmark to jump to it.', credit:'', photo:null, claimant:null };
+
 function visibleLandmarks() {
-  return LANDMARKS.filter(l => !l.claimant);
+  return [OVERVIEW, ...LANDMARKS.filter(l => !l.claimant)];
 }
 
 // ─────────────────────────────────────────────
@@ -631,7 +667,7 @@ function renderList() {
   document.getElementById('s-claimed').textContent = claimed;
   document.getElementById('s-open').textContent = LANDMARKS.length - claimed;
 
-  const filtered = LANDMARKS;
+  const filtered = [OVERVIEW, ...LANDMARKS];
 
   const list = document.getElementById('list');
   list.innerHTML = '';
@@ -669,17 +705,40 @@ function renderList() {
 function renderDetail(l) {
   const nextSlot = currentSlot === 'a' ? 'b' : 'a';
   const nextSlide = document.getElementById('slide-' + nextSlot);
-  const color = suitColor(l.suit);
 
-  if (l.photo) {
-    nextSlide.innerHTML = `<img src="${l.photo}" alt="${l.name}" />`;
+  if (l.id === 0) {
+    // Overview grid
+    const grid = document.createElement('div');
+    grid.className = 'overview-grid';
+    LANDMARKS.forEach(lm => {
+      const cell = document.createElement('div');
+      cell.className = 'overview-cell' + (lm.claimant ? ' claimed' : '');
+      if (lm.photo) {
+        const img = document.createElement('img');
+        img.src = lm.photo;
+        img.alt = lm.name;
+        cell.appendChild(img);
+      }
+      const label = document.createElement('div');
+      label.className = 'ov-name';
+      label.textContent = lm.name;
+      cell.appendChild(label);
+      grid.appendChild(cell);
+    });
+    nextSlide.innerHTML = '';
+    nextSlide.appendChild(grid);
   } else {
-    nextSlide.innerHTML = `
-      <div class="photo-placeholder">
-        <div class="ph-icon" style="color:${color};opacity:0.35">${l.pip}</div>
-        <div class="ph-label">${l.name}</div>
-        <div class="ph-path">${photoPath(l)}</div>
-      </div>`;
+    const color = suitColor(l.suit);
+    if (l.photo) {
+      nextSlide.innerHTML = `<img src="${l.photo}" alt="${l.name}" />`;
+    } else {
+      nextSlide.innerHTML = `
+        <div class="photo-placeholder">
+          <div class="ph-icon" style="color:${color};opacity:0.35">${l.pip}</div>
+          <div class="ph-label">${l.name}</div>
+          <div class="ph-path">${photoPath(l)}</div>
+        </div>`;
+    }
   }
 
   document.getElementById('d-year-label').textContent = l.year ? (typeof l.year === 'string' ? l.year : `Est. ${l.year}`) : 'Dallas, TX';
@@ -760,7 +819,7 @@ function setFilter(f, btn) {
     activeId = vis[0]?.id || LANDMARKS[0].id;
   }
   renderList();
-  const active = LANDMARKS.find(l => l.id === activeId);
+  const active = vis.find(l => l.id === activeId) || OVERVIEW;
   if (active) renderDetail(active);
   resetProgress();
 }
@@ -771,9 +830,9 @@ function updateSyncLabel(when) {
 
 function resetToStart() {
   userSelected = false;
-  activeId = visibleLandmarks()[0]?.id || LANDMARKS[0].id;
+  activeId = 0;
   renderList();
-  renderDetail(LANDMARKS.find(l => l.id === activeId));
+  renderDetail(OVERVIEW);
   resetProgress();
 }
 
@@ -781,7 +840,7 @@ function resetToStart() {
 //  INIT
 // ─────────────────────────────────────────────
 renderList();
-renderDetail(LANDMARKS[0]);
+renderDetail(OVERVIEW);
 resetProgress();
 rotateTimer = setInterval(() => { advance(); resetProgress(); }, INTERVAL);
 
