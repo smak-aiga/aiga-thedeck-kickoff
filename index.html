@@ -687,11 +687,11 @@ function renderList() {
       resetProgress();
     };
     row.innerHTML = `
+      ${l.id === activeId ? '<div style="color:var(--black);font-size:13px;flex-shrink:0;margin-right:6px;">↳</div>' : '<div style="width:19px;flex-shrink:0;margin-right:6px;"></div>'}
       <div class="row-info">
         <div class="row-name">${l.name}</div>
       </div>
       ${l.claimant ? '<div class="row-claimed-badge">Claimed</div>' : ''}
-      ${l.id === activeId ? '<div style="color:var(--black);font-size:14px;flex-shrink:0;">›</div>' : ''}
     `;
     list.appendChild(row);
   });
