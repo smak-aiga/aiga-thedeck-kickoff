@@ -613,16 +613,25 @@ async function fetchSheet() {
     const res = await fetch(SHEET_CSV_URL + '&t=' + Date.now());
     const text = await res.text();
     const rows = text.trim().split('\n').slice(1); // skip header row
+    let changed = false;
     rows.forEach((row, i) => {
       const cols = parseCSVRow(row);
       const designer = (cols[3] || '').replace(/^"|"$/g, '').trim(); // column D = DESIGNER
       const landmark = LANDMARKS[i];
-      if (landmark) landmark.claimant = designer || null;
+      if (landmark) {
+        const newClaimant = designer || null;
+        if (landmark.claimant !== newClaimant) {
+          landmark.claimant = newClaimant;
+          changed = true;
+        }
+      }
     });
-    updateSyncLabel('just now');
-    renderList();
-    const active = LANDMARKS.find(l => l.id === activeId);
-    if (active) renderDetail(active);
+    if (changed) {
+      updateSyncLabel('just now');
+      renderList();
+      const activeL = [OVERVIEW, ...LANDMARKS].find(l => l.id === activeId);
+      if (activeL) renderDetail(activeL);
+    }
   } catch(e) {
     console.warn('Sheet fetch failed', e);
   }
