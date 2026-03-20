@@ -440,15 +440,6 @@
       </div>
     </div>
 
-    <div class="suit-filters">
-      <button class="suit-btn active" onclick="setFilter('all',this)">All</button>
-      <button class="suit-btn spades" onclick="setFilter('Spades',this)">♠ Spades</button>
-      <button class="suit-btn hearts" onclick="setFilter('Hearts',this)">♥ Hearts</button>
-      <button class="suit-btn clubs" onclick="setFilter('Clubs',this)">♣ Clubs</button>
-      <button class="suit-btn diamonds" onclick="setFilter('Diamonds',this)">♦ Diamonds</button>
-      <button class="suit-btn jokers" onclick="setFilter('Joker',this)">★ Jokers</button>
-    </div>
-
     <div class="landmark-list" id="list"></div>
   </div>
 
@@ -508,7 +499,7 @@ const LANDMARKS = [
   { id:3,  num:'3', suit:'Spades',   pip:'♤', name:'Margaret Hunt Hill Bridge',                        address:'Singleton Blvd & Sylvan Ave, Dallas, TX',   year:2012, fact:'Designed by Santiago Calatrava, the single white arch soars 400 feet — the same height as a 40-story building.', credit:'"Margaret Hunt Hill Bridge" by undone, CC BY-NC-ND 2.0', photo:'photos/03-margaret-hunt-hill-bridge.jpg' },
   { id:4,  num:'4', suit:'Spades',   pip:'♤', name:'Dallas City Hall',                                 address:'1500 Marilla St, Dallas, TX',               year:1978, fact:'Designed by I.M. Pei, the building intentionally tilts outward at the top — a bold architectural gesture symbolizing openness to citizens.', credit:'Photo by Carol M. Highsmith, Library of Congress, public domain', photo:'photos/04-dallas-city-hall.jpg' },
   { id:5,  num:'5', suit:'Spades',   pip:'♤', name:'Dallas County Courthouse',                         address:'509 Main St, Dallas, TX',                   year:1892, fact:'Known as "Old Red," this Romanesque Revival courthouse is built from red sandstone and is one of the oldest buildings in downtown Dallas.', credit:'"Dallas County Courthouse" by Renelibrary, CC BY-SA 4.0 via Wikimedia Commons', photo:'photos/05-dallas-county-courthouse.jpg' },
-  { id:6,  num:'6', suit:'Spades',   pip:'♤', name:'The Pegasus at the Magnolia Building',             address:'1401 Commerce St, Dallas, TX',              year:1934, fact:'The flying red horse was originally placed atop the building in 1934 as a symbol for Magnolia Oil Co. — visible for miles, it became the city\'s unofficial mascot.', credit:'Photo by David Parish via Pexels (free to use)', photo:'photos/06-the-pegasus-at-the-magnolia-building.jpeg' },
+  { id:6,  num:'6', suit:'Spades',   pip:'♤', name:'The Pegasus at the Magnolia Building',             address:'1401 Commerce St, Dallas, TX',              year:1934, fact:'The flying red horse was originally placed atop the building in 1934 as a symbol for Magnolia Oil Co. — visible for miles, it became the city\'s unofficial mascot.', credit:'Photo by David Parish via Pexels (free to use)', photo:'photos/06-the-pegasus-at-the-magnolia-building.jpg' },
   { id:7,  num:'7', suit:'Spades',   pip:'♤', name:'Dallas Holocaust and Human Rights Museum',         address:'300 N Houston St, Dallas, TX',              year:2019, fact:'One of the largest Holocaust museums in the US, it holds over 750 artifacts and documents the stories of more than 200 survivors.', credit:'"Dallas Holocaust & Human Rights Museum" by MacTheWikiman, CC BY-SA 4.0 via Wikimedia Commons', photo:'photos/07-dallas-holocaust-and-human-rights-museum.png' },
   { id:8,  num:'8', suit:'Spades',   pip:'♤', name:'AT&T Performing Arts Center – Winspear Opera House', address:'2403 Flora St, Dallas, TX',              year:2009, fact:'The striking red "parasol" canopy shades the glass lobby and reduces cooling costs — it was designed by Norman Foster to echo the Texas sun.', credit:'Photo by Boudewijn Huijgens, Library of Congress, public domain', photo:'photos/08-winspear-opera-house.jpg' },
   { id:9,  num:'9', suit:'Spades',   pip:'♤', name:'Wyly Theatre',                                     address:'2400 Flora St, Dallas, TX',                 year:2009, fact:'Designed by REX/OMA, the entire seating configuration can be rearranged in 24 hours — it\'s one of the most flexible theater spaces in the world.', credit:'"Wyly Theatre, Dallas" by Andreas Praefcke, CC BY 3.0 via Wikimedia Commons', photo:'photos/09-wyly-theatre.jpg' },
@@ -628,10 +619,7 @@ function photoPath(l) {
 }
 
 function visibleLandmarks() {
-  return LANDMARKS.filter(l => {
-    if (currentFilter !== 'all' && l.suit !== currentFilter) return false;
-    return !l.claimant;
-  });
+  return LANDMARKS.filter(l => !l.claimant);
 }
 
 // ─────────────────────────────────────────────
@@ -643,9 +631,7 @@ function renderList() {
   document.getElementById('s-claimed').textContent = claimed;
   document.getElementById('s-open').textContent = LANDMARKS.length - claimed;
 
-  const filtered = currentFilter === 'all'
-    ? LANDMARKS
-    : LANDMARKS.filter(l => l.suit === currentFilter);
+  const filtered = LANDMARKS;
 
   const list = document.getElementById('list');
   list.innerHTML = '';
