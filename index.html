@@ -612,15 +612,12 @@ async function fetchSheet() {
   try {
     const res = await fetch(SHEET_CSV_URL + '&t=' + Date.now());
     const text = await res.text();
-    const rows = text.trim().split('\n').slice(1); // skip header row
+    const rows = text.trim().split('\n').slice(1);
 
-    // Sanity check — if sheet returns fewer rows than landmarks, it's a bad/partial response
-    if (rows.length < LANDMARKS.length) {
-      console.warn('Incomplete sheet response, skipping update');
-      return;
-    }
+    // Sanity check — incomplete response, skip
+    if (rows.length < LANDMARKS.length) return;
 
-    // Build new claimant map fully before touching LANDMARKS
+    // Build new claimant map
     const newClaimants = {};
     rows.forEach((row, i) => {
       const cols = parseCSVRow(row);
@@ -628,14 +625,25 @@ async function fetchSheet() {
       if (LANDMARKS[i]) newClaimants[LANDMARKS[i].id] = designer || null;
     });
 
-    // Check if anything actually changed
+    // Never let claimed count DROP unless it's confirmed twice in a row
+    // (guards against Google Sheets propagation lag returning stale data)
+    const currentClaimed = LANDMARKS.filter(l => l.claimant).length;
+    const newClaimed = Object.values(newClaimants).filter(v => v).length;
+    if (newClaimed < currentClaimed) {
+      if (!fetchSheet._pendingDrop || fetchSheet._pendingDrop !== JSON.stringify(newClaimants)) {
+        fetchSheet._pendingDrop = JSON.stringify(newClaimants);
+        return; // wait for next fetch to confirm
+      }
+    }
+    fetchSheet._pendingDrop = null;
+
+    // Check if anything changed
     let changed = false;
     LANDMARKS.forEach(l => {
       const incoming = newClaimants.hasOwnProperty(l.id) ? newClaimants[l.id] : l.claimant;
       if (l.claimant !== incoming) changed = true;
     });
 
-    // Only apply + re-render if something changed
     if (changed) {
       LANDMARKS.forEach(l => {
         if (newClaimants.hasOwnProperty(l.id)) l.claimant = newClaimants[l.id];
