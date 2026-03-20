@@ -613,20 +613,27 @@ async function fetchSheet() {
     const res = await fetch(SHEET_CSV_URL + '&t=' + Date.now());
     const text = await res.text();
     const rows = text.trim().split('\n').slice(1); // skip header row
-    let changed = false;
+
+    // Build new claimant map fully before touching LANDMARKS
+    const newClaimants = {};
     rows.forEach((row, i) => {
       const cols = parseCSVRow(row);
-      const designer = (cols[3] || '').replace(/^"|"$/g, '').trim(); // column D = DESIGNER
-      const landmark = LANDMARKS[i];
-      if (landmark) {
-        const newClaimant = designer || null;
-        if (landmark.claimant !== newClaimant) {
-          landmark.claimant = newClaimant;
-          changed = true;
-        }
-      }
+      const designer = (cols[3] || '').replace(/^"|"$/g, '').trim();
+      if (LANDMARKS[i]) newClaimants[LANDMARKS[i].id] = designer || null;
     });
+
+    // Check if anything actually changed
+    let changed = false;
+    LANDMARKS.forEach(l => {
+      const incoming = newClaimants.hasOwnProperty(l.id) ? newClaimants[l.id] : l.claimant;
+      if (l.claimant !== incoming) changed = true;
+    });
+
+    // Only apply + re-render if something changed
     if (changed) {
+      LANDMARKS.forEach(l => {
+        if (newClaimants.hasOwnProperty(l.id)) l.claimant = newClaimants[l.id];
+      });
       updateSyncLabel('just now');
       renderList();
       const activeL = [OVERVIEW, ...LANDMARKS].find(l => l.id === activeId);
