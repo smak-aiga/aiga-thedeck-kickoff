@@ -794,9 +794,8 @@ function renderDetail(l) {
 // ─────────────────────────────────────────────
 //  ROTATION
 // ─────────────────────────────────────────────
-async function advance() {
+function advance() {
   if (paused || userSelected) return;
-  await fetchSheet();
   const vis = visibleLandmarks();
   if (!vis.length) return;
   const idx = vis.findIndex(l => l.id === activeId);
@@ -875,7 +874,7 @@ renderDetail(OVERVIEW);
 resetProgress();
 rotateTimer = setInterval(() => { advance(); resetProgress(); }, INTERVAL);
 
-// Fetch sheet on load, then updates happen before each slide swap
+// Fetch sheet once on load only
 fetchSheet();
 </script>
 </body>
