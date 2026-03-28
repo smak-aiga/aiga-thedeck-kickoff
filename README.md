@@ -9,7 +9,13 @@ This app rotated through all 54 landmark photos on a display screen while guests
 The live Google Sheet sync has been disconnected from this repo after the event to protect participant information. The app still displays all 54 landmarks and rotates normally — the sheet URL has simply been removed from the code.
  
 If you fork this project for your own event, replace the `SHEET_CSV_URL` constant in `index.html` with your own published Google Sheet CSV link.
+
+ ## How the Google Sheet worked
  
+The app synced with a Google Sheet published as a CSV. Each row represented one landmark card, and the app read **column D (DESIGNER)** to determine whether a card had been claimed.
+
+ <img width="3456" height="1994" alt="image" src="https://github.com/user-attachments/assets/f572e872-7a7d-47bc-9be3-66c69378d5f0" />
+
 ## How it works
  
 - Landmark photos rotate automatically on a TV display
