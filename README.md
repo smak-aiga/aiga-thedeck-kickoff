@@ -6,7 +6,7 @@ This app rotated through all 54 landmark photos on a display screen while guests
  
 ## Note on Google Sheet sync
  
-The live Google Sheet sync has been disconnected from this repo after the event to protect participant information (names, emails, phone numbers). The app still displays all 54 landmarks and rotates normally — the sheet URL has simply been removed from the code.
+The live Google Sheet sync has been disconnected from this repo after the event to protect participant information. The app still displays all 54 landmarks and rotates normally — the sheet URL has simply been removed from the code.
  
 If you fork this project for your own event, replace the `SHEET_CSV_URL` constant in `index.html` with your own published Google Sheet CSV link.
  
